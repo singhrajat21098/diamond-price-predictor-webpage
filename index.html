@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Diamond Price Predictor</title>
+</head>
+<body>
+    
+
+
+
+    <!-- Hero -->
+    <div class="container col-xl-10 col-xxl-8 px-4 py-1">
+        <div class="row align-items-center g-lg-5 py-5">
+          <div class="col-lg-7 text-center text-lg-start">
+            <img src="diamond.svg" width="128px">
+            <h1 class="display-4 fw-bold lh-1 mb-3">Diamond Price Predictor</h1>
+            <p class="col-lg-10 fs-4" id="result">Please enter all the attributes to predict price of your diamond</p>
+          </div>
+          <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light">
+                <div id="error" class="mb-2 fw-bold text-danger">
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="carat" max="6" min="0.1" required>
+                            <label for="carat">Carat</label>
+                          </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="x" min="0" required>
+                            <label for="x">Length in mm</label>
+                          </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- X,y,z -->
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="y" min="0" required>
+                            <label for="y">Width in mm</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- X,y,z -->
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="z" min="0" required>
+                            <label for="z">Depth in mm</label>
+                        </div>
+                    </div>
+                </div>
+        
+              
+              
+
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="table" required>
+                    <label for="table">table</label>
+                  </div>
+              <!-- Drop Down Menu For CUT -->
+              <!-- Fair, Good, Very Good, Premium, Ideal -->
+              
+              <select class="form-select mb-3" id="cut" required>
+                <option value="0">Diamond's Cut</option>
+                <option value="1">Fair</option>
+                <option value="2">Good</option>
+                <option value="3">Very Good</option>
+                <option value="4">Premium</option>
+                <option value="5">Ideal</option>
+              </select>
+
+              <!-- Color -->
+              <!-- {'E' : 6, 'I' : 2, 'J' : 1, 'H' : 3, 'F' : 5, 'G' : 4, 'D' : 7} -->
+              <select class="form-select mb-3" id="color" required>
+                <option value="0">Diamond's Color</option>
+                <option value="1">J</option>
+                <option value="2">I</option>
+                <option value="3">H</option>
+                <option value="4">G</option>
+                <option value="5">F</option>
+                <option value="6">E</option>
+                <option value="7">D</option>
+              </select>
+
+              <!-- Diamond Clarity -->
+              <!-- {'SI2' : 2, 'SI1' : 3, 'VS2' : 4, 'VVS2' : 6, 'VVS1' : 7, 'VS1' : 5, 'I1' : 1, 'IF' : 8} -->
+              <select class="form-select mb-3" id="clarity" required>
+                <option value="0">Diamond's Clarity</option>
+                <option value="1">I1</option>
+                <option value="2">SI2</option>
+                <option value="3">SI1</option>
+                <option value="4">VS2</option>
+                <option value="5">VS1</option>
+                <option value="6">VVS2</option>
+                <option value="7">VVS1</option>
+                <option value="8">IF</option>
+              </select>
+
+              <hr class="my-4">
+              <button class="w-100 btn btn-lg btn-success mb-3" type="button" onclick="showResults()">Calculate Price $</button>
+              <button class="w-100 btn btn-lg btn-secondary" type="reset" onclick="reset_f()">Reset</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script>
+          function validateForm(){
+              // alert("Validate form function begins");
+              var errorMessage = "";
+              var cut = parseInt(document.getElementById("cut").value);
+              var color = parseInt(document.getElementById("color").value);
+              var clarity = parseInt(document.getElementById("clarity").value);
+              var validationFlag = true;
+
+              if (isNaN(cut) || cut == 0){
+                errorMessage += "Please select a valid value for Cut.<BR>";
+                validateFlag = false;
+                
+              }
+              if (isNaN(color) || color == 0){
+                errorMessage += "Please select a valid value for Color.<BR>";
+                validateFlag = false;
+                
+              }
+              if (isNaN(clarity) || clarity == 0){
+                errorMessage += "Please select a valid value for Clarity.<BR>";
+                validateFlag = false;
+                
+              }
+              document.getElementById("error").innerHTML = 
+              errorMessage;
+              return validationFlag;
+
+          }
+          async function showResults() {
+            var validationFlag = validateForm();
+            if (validationFlag){
+                var params = {
+                        'color': parseInt(document.getElementById("color").value),
+                        'clarity': parseInt(document.getElementById("clarity").value),
+                        'cut': parseInt(document.getElementById("cut").value) ,
+                        'carat': parseFloat(document.getElementById("carat").value),
+                        'x':parseFloat(document.getElementById("x").value),
+                        'y': parseFloat(document.getElementById("y").value),
+                        'z':parseFloat(document.getElementById("z").value),
+                        'table':parseFloat(document.getElementById("table").value)
+                        };
+                output_json = await getDiamondPrice(params)
+                console.log(output_json)
+
+                document.getElementById("result").innerHTML = 'Price is <span class="text-success">$' + output_json.price+'</span>';
+                
+
+
+                
+            }
+
+          }
+
+          async function getDiamondPrice(params){
+            var esc = encodeURIComponent;
+            var query = 'http://127.0.0.1:5000/diamonds_api/?'+Object.keys(params).map(k => esc(k) + '=' + esc(params[k])).join('&');
+            response = await fetch(query);
+            data = await response.json()
+            console.log(data)
+            return data 
+          }
+
+          function reset_f(){
+            // alert("Button pressed");
+            document.getElementById("result").innerHTML = "Please enter all the attributes to predict price of your diamond";
+            
+            window.location.reload();
+          }
+
+
+
+
+      </script>
+</body>
+</html>
